@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@soylogan - Completo</title>
+    <title>@FiscalAimbot - Completo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -258,6 +258,22 @@
             color: #666;
         }
     </style>
+
+<style>
+    /* Efecto de catálogo al deslizar hacia abajo */
+    .catalogo-item {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        will-change: opacity, transform;
+    }
+
+    .catalogo-item.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
 </head>
 <body>
 
@@ -265,8 +281,8 @@
         <!-- Header -->
         <div class="header">
             <div class="brand">
-                <div class="brand-icon"><img src="imagenes/SoyLogan.png" alt="Logo" style="max-width: 100%; height: auto;"></div>
-                <span>SoyLogan</span>
+                <div class="brand-icon"><img src="imagenes/ARTHUR.png" alt="Logo" style="max-width: 100%; height: auto;"></div>
+                <span>FiscalAimbot</span>
             </div>
             <div class="header-badge">Android & iOS</div>
         </div>
@@ -707,7 +723,7 @@
 
     <!-- Pie de página -->
     <div style="text-align: center; color: #777; font-size: 12px; margin-top: 40px;">
-        <div style="font-weight: 700; color: #000;">@soylogan</div>
+        <div style="font-weight: 700; color: #000;">@FiscalAimbot</div>
         <div>CREADOR DE LA WEB FISCAL007VIP</div>
     </div>
 
@@ -793,10 +809,10 @@
     }
 
     function sendToWhatsApp() {
-        const tuNumeroWhatsApp = "+573023518590"; // Reemplaza por tu número real
+        const tuNumeroWhatsApp = "https://wa.me/qr/R6JJWENQHTSRM1"; // Reemplaza por tu número real
         const preguntaExtra = document.getElementById('wa-question').value;
         
-        let mensaje = `Hola SoyLogan, vengo desde la web de Regedit.%0A` +
+        let mensaje = `Hola Fiscal007vip, vengo desde la web de Regedit.%0A` +
                       `• Motivo: ${formData.motivo}%0A` +
                       `• Plataforma: ${formData.plataforma}%0A` +
                       `• Plan de interés: ${formData.plan}`;
@@ -807,6 +823,47 @@
 
         window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${mensaje}`, '_blank');
     }
+
+    // 1. Lógica de inicio de sesión con Firebase
+        function iniciarSesion() {
+            const keyIngresada = document.getElementById('user-pass').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if (!keyIngresada) {
+                errorMsg.innerText = "Por favor, introduce una Key.";
+                return;
+            }
+
+            db.ref('/keys/' + keyIngresada).once('value', (snapshot) => {
+                if (snapshot.exists() && (snapshot.val().status === "Activa" || snapshot.val() === true)) {
+                    document.getElementById('login-screen').style.display = 'none';
+                } else {
+                    errorMsg.innerText = "Key incorrecta o caducada.";
+                }
+            }).catch((error) => {
+                errorMsg.innerText = "Error de conexión con la base de datos.";
+            });
+        }
+
+        // 2. Efecto de aparición suave al deslizar hacia abajo en los catálogos
+        document.addEventListener("DOMContentLoaded", function() {
+            const elementos = document.querySelectorAll('.catalogo-item');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15
+            });
+
+            elementos.forEach(el => {
+                observer.observe(el);
+            });
+        });
 </script>
 
 </body>
